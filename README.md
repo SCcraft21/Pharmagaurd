@@ -1,251 +1,128 @@
-🧬 PharmaGuard
-Pharmacogenomic Risk Prediction System
-RIFT 2026 Hackathon — HealthTech Track
-🚀 Live Demo
+🧬 PharmaGuard – Tech Stack
+🖥️ Frontend
 
-🌐 Live Application: [Add your deployed URL here]
+Framework:
 
-🎥 LinkedIn Demo Video: [Add LinkedIn video link here]
+Next.js (React 18)
 
-📌 Problem Statement
+Styling:
 
-Adverse drug reactions (ADRs) cause over 100,000 deaths annually in the United States. Many of these are preventable through pharmacogenomic testing.
+Tailwind CSS
 
-PharmaGuard is an AI-powered web application that:
+HTTP Client:
 
-Parses authentic VCF genomic files
+Axios
 
-Identifies pharmacogenomic variants
+Purpose:
 
-Predicts drug-specific risk levels
+Upload VCF file
 
-Generates explainable clinical insights using LLMs
+Accept drug input
 
-Aligns recommendations with CPIC guidelines
+Send POST request to backend
 
-🏗️ System Architecture
-🔷 High-Level Architecture
-flowchart LR
+Display structured JSON results
 
-    subgraph UI[User Interface]
-        U1[VCF File Upload]
-        U2[Drug Selection Input]
-    end
+⚙️ Backend
 
-    subgraph Backend[PharmaGuard Backend - FastAPI]
-        P[VCF Parser]
-        R[Risk Analysis Engine\n(CPIC-Based Rules)]
-        API[API Layer]
-    end
+Framework:
 
-    subgraph LLM[LLM Explanation Layer]
-        M[Mistral-7B-Instruct\nHugging Face API]
-    end
+FastAPI
 
-    subgraph Output[Response Layer]
-        J[Structured JSON Output]
-    end
+Language:
 
-    U1 --> Backend
-    U2 --> Backend
+Python 3.11
 
-    P --> R
-    R --> M
-    M --> J
+Server:
 
-🔷 Detailed Data Flow
-sequenceDiagram
-    participant User
-    participant Frontend
-    participant Backend
-    participant Parser
-    participant Rules
-    participant LLM
-    participant HF as HuggingFace API
+Uvicorn (ASGI server)
 
-    User->>Frontend: Upload VCF + Drug Input
-    Frontend->>Backend: POST /analyze
-    Backend->>Parser: Extract variants
-    Parser->>Rules: Determine diplotype & phenotype
-    Rules->>LLM: Send structured context
-    LLM->>HF: Generate explanation
-    HF-->>LLM: Return text
-    LLM-->>Backend: Structured explanation
-    Backend-->>Frontend: JSON Response
-    Frontend-->>User: Display results
+Validation & Schema:
 
-🧠 Core Components
-1️⃣ VCF Parser
+Pydantic
 
-Extracts:
+Environment Management:
 
-Gene symbols
+python-dotenv
 
-Star alleles
+HTTP Requests (LLM calls):
 
-rsIDs
+requests
 
-Validates file structure
+Core Responsibilities:
 
-Handles missing annotations gracefully
+VCF file handling
 
-2️⃣ Risk Analysis Engine
+Variant extraction
 
-Implements CPIC-aligned pharmacogenomic logic.
+Pharmacogenomic rule engine
 
-Maps:
+LLM explanation integration
 
-Diplotype	Phenotype	Risk
-*4/*4	PM	Ineffective
-*1/*3	IM	Adjust Dosage
-*1/*1	NM	Safe
-3️⃣ LLM Explanation Layer
+Structured JSON output
+
+🧬 Genomic Processing
+
+Custom VCF parsing logic
+
+CPIC-based pharmacogenomic rules
+
+Gene support:
+
+CYP2D6
+
+CYP2C19
+
+CYP2C9
+
+SLCO1B1
+
+TPMT
+
+DPYD
+
+🤖 AI / LLM Layer
+
+Provider:
+
+Hugging Face Inference API
 
 Model:
 
 mistralai/Mistral-7B-Instruct-v0.2
 
+Function:
 
-Generates:
+Generate:
 
 Clinical summary
 
-Biological mechanism
+Mechanism of action
 
 CPIC-aligned recommendation
 
-4️⃣ Structured Output
+☁️ Deployment
 
-The system produces JSON matching the hackathon-required schema:
+Frontend Hosting:
 
-{
-  "patient_id": "PATIENT_XXX",
-  "drug": "CODEINE",
-  "timestamp": "ISO8601",
-  "risk_assessment": {},
-  "pharmacogenomic_profile": {},
-  "clinical_recommendation": {},
-  "llm_generated_explanation": {},
-  "quality_metrics": {}
-}
+Vercel
 
-📂 Project Structure
-backend/
-│
-├── main.py              # FastAPI entry
-├── vcf_parser.py        # VCF parsing logic
-├── rules.py             # CPIC rule engine
-├── explainer.py         # Hugging Face LLM integration
-├── models.py            # Pydantic schema models
-├── config.py            # Environment configuration
-├── requirements.txt
-└── .env                 # API keys (not committed)
+Backend Hosting:
 
-⚙️ Tech Stack
-Backend
+Render
 
-Python 3.11
+Environment Variables:
 
-FastAPI
+Stored securely via platform dashboard
 
-Pydantic
+🔐 Security
 
-Requests
+.env file for API keys
 
-python-dotenv
+No database persistence
 
-Frontend
+No genomic data storage
 
-Next.js (React)
-
-Tailwind CSS
-
-Axios
-
-LLM
-
-Hugging Face Inference API
-
-Mistral-7B-Instruct
-
-🛠 Installation & Setup
-1️⃣ Clone Repository
-git clone <repo-url>
-cd PharmaGuard/backend
-
-2️⃣ Install Dependencies
-pip install -r requirements.txt
-
-3️⃣ Create .env
-HF_API_KEY=hf_your_token_here
-
-4️⃣ Run Backend
-uvicorn main:app --reload
-
-
-Visit:
-
-http://127.0.0.1:8000/docs
-
-🚀 Deployment
-Backend → Render
-
-Start command:
-
-uvicorn main:app --host 0.0.0.0 --port 10000
-
-
-Add environment variable:
-
-HF_API_KEY=hf_your_token_here
-
-Frontend → Vercel
-
-Update API endpoint to:
-
-https://your-backend.onrender.com/analyze
-
-
-Deploy via GitHub integration.
-
-🔐 Security Considerations
-
-No genomic data persistence
-
-No database storage
-
-Environment variables secured
+CORS enabled
 
 Input validation enforced
-
-CORS configured for production
-
-🎯 Hackathon Evaluation Alignment
-Criterion	Implementation
-Problem Clarity	Pharmacogenomic risk modeling
-Technical Depth	VCF parsing + CPIC rules
-Explainability	LLM-generated clinical reasoning
-Innovation	Modular AI architecture
-JSON Compliance	Exact schema matching
-Documentation	Complete README + diagrams
-🧪 Testing
-
-Sample VCF files included for:
-
-CODEINE (CYP2D6 PM)
-
-WARFARIN (CYP2C9 IM)
-
-CLOPIDOGREL (CYP2C19 PM)
-
-SIMVASTATIN (SLCO1B1 variant)
-
-Multi-drug cases
-
-👥 Team
-
-Add team member names here
-
-📜 License
-
-MIT License
